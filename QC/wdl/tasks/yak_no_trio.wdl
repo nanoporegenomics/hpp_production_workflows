@@ -131,10 +131,6 @@ task yakAssemblyStats {
         # name
         PREFIX=$(basename ~{assemblyFastaPat} | sed 's/.gz$//' | sed 's/.fa\(sta\)*$//' | sed 's/[._][pm]at\(ernal\)*//')
 
-        # Computing error rates
-        #yak trioeval -t ~{threadCount} ~{patYak} ~{matYak} ~{assemblyFastaPat} > $PREFIX.pat.yak.switch-error.txt
-        #yak trioeval -t ~{threadCount} ~{patYak} ~{matYak} ~{assemblyFastaMat} > $PREFIX.mat.yak.switch-error.txt
-
         # QV
         yak qv -t ~{threadCount} -p -K ~{genomeSize} -l ~{minSequenceLength} ~{sampleYak} ~{assemblyFastaPat} > $PREFIX.pat.yak.qv.txt
         yak qv -t ~{threadCount} -p -K ~{genomeSize} -l ~{minSequenceLength} ~{sampleYak} ~{assemblyFastaMat} > $PREFIX.mat.yak.qv.txt
@@ -145,11 +141,6 @@ task yakAssemblyStats {
         tail -n4 $PREFIX.mat.yak.qv.txt >>$SUMMARY
         echo "# pat qv" >>$SUMMARY
         tail -n4 $PREFIX.pat.yak.qv.txt >>$SUMMARY
-
-        #echo "# mat switch" >>$SUMMARY
-        #tail -n3 $PREFIX.mat.yak.switch-error.txt >>$SUMMARY
-        #echo "# pat switch" >>$SUMMARY
-        #tail -n3 $PREFIX.pat.yak.switch-error.txt >>$SUMMARY
 
         # tar
         tar czvf $PREFIX.yak-qc.tar.gz *txt
